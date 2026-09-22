@@ -1,43 +1,43 @@
-# j
+# vermink
 
 零依赖终端美化引擎：把纯文本主题编译成 Zsh / Bash / PowerShell 的提示符与状态栏。
 
 ## 安装
 
 ```bash
-pip install j
+pip install vermink
 ```
 
 ## 快速开始
 
 ```bash
 # 生成默认 dark 主题并安装到当前 shell
-j init
+vermink init
 
 # 预览主题效果（不修改任何文件）
-j preview dark
+vermink preview dark
 
 # 列出所有主题
-j list
+vermink list
 ```
 
 ## 子命令
 
 | 命令 | 说明 |
 | --- | --- |
-| `j init [--shell zsh\|bash\|pwsh]` | 生成默认 dark 主题并安装 |
-| `j preview <主题名> [--plain]` | 终端预览渲染效果 |
-| `j install <主题名> --shell zsh\|bash\|pwsh` | 安装到 shell 启动文件（自动备份） |
-| `j uninstall --shell zsh\|bash\|pwsh` | 卸载并还原备份 |
-| `j list [--shell zsh\|bash\|pwsh]` | 列出主题与当前生效主题 |
-| `j show <主题名>` | 打印主题源配置 |
+| `vermink init [--shell zsh\|bash\|pwsh]` | 生成默认 dark 主题并安装 |
+| `vermink preview <主题名> [--plain]` | 终端预览渲染效果 |
+| `vermink install <主题名> --shell zsh\|bash\|pwsh` | 安装到 shell 启动文件（自动备份） |
+| `vermink uninstall --shell zsh\|bash\|pwsh` | 卸载并还原备份 |
+| `vermink list [--shell zsh\|bash\|pwsh]` | 列出主题与当前生效主题 |
+| `vermink show <主题名>` | 打印主题源配置 |
 
 ## 主题文件
 
 主题文件使用 INI 格式，包含以下区块：
 
 ```ini
-## j theme mytheme
+## vermink theme mytheme
 
 [palette]
 user = bright_green
@@ -101,13 +101,13 @@ exit_code = exit_code
 
 ```bash
 # 保存主题到配置目录
-j init --theme dark --name mytheme --no-install
+vermink init --theme dark --name mytheme --no-install
 
 # 编辑主题
-vim ~/.config/j/themes/mytheme.conf
+vim ~/.config/vermink/themes/mytheme.conf
 
 # 安装自定义主题
-j install mytheme --shell zsh
+vermink install mytheme --shell zsh
 ```
 
 ## Shell 支持

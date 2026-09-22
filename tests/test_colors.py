@@ -1,8 +1,15 @@
-"""Tests for j.colors module."""
+"""Tests for vermink.colors module."""
 
 import pytest
 
-from j.colors import COLORS, MODIFIERS, POWERSHELL_COLORS, name_for_sgr, powershell_color, resolve
+from vermink.colors import (
+    COLORS,
+    MODIFIERS,
+    POWERSHELL_COLORS,
+    name_for_sgr,
+    powershell_color,
+    resolve,
+)
 
 
 class TestResolve:

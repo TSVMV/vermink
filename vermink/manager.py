@@ -1,4 +1,4 @@
-"""Install, uninstall and list j themes inside shell startup files."""
+"""Install, uninstall and list vermink themes inside shell startup files."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ import tempfile
 from pathlib import Path
 
 from .config import BLOCK_END, BLOCK_START, Theme, load, parse
-from .errors import ConfigError, JError
+from .errors import ConfigError, VerminkError
 from .themes import BUILT_INS
 
 __all__ = [
@@ -33,7 +33,7 @@ MARKER = "theme="
 
 def config_dir(root: str | Path | None = None) -> Path:
     base = Path(root).expanduser() if root else Path(os.environ.get("XDG_CONFIG_HOME") or "~/.config").expanduser()
-    return base / "j"
+    return base / "vermink"
 
 
 def theme_dir(root: str | Path | None = None) -> Path:
@@ -47,7 +47,7 @@ def theme_path(name: str, root: str | Path | None = None) -> Path:
 def rc_path(shell: str, home: str | Path | None = None) -> Path:
     """Return the startup file for a shell."""
     if shell not in SHELLS:
-        raise JError(f"未知 shell {shell!r}，支持 {', '.join(SHELLS)}")
+        raise VerminkError(f"未知 shell {shell!r}，支持 {', '.join(SHELLS)}")
     root = Path(home).expanduser() if home else Path("~").expanduser()
     if shell == "zsh":
         return root / ".zshrc"
@@ -120,7 +120,7 @@ def current_theme(shell: str, home: str | Path | None = None, rc: str | Path | N
 def atomic_write(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     handle = tempfile.NamedTemporaryFile(  # noqa: SIM115
-        "w", encoding="utf-8", dir=str(path.parent), prefix=".j-", delete=False
+        "w", encoding="utf-8", dir=str(path.parent), prefix=".vermink-", delete=False
     )
     tmp = handle.name
     try:
@@ -144,7 +144,7 @@ def install(
     path = Path(rc).expanduser() if rc else rc_path(shell, home)
     existing = path.read_text(encoding="utf-8", errors="replace") if path.is_file() else ""
     stripped = remove_block(existing)
-    backup = path.with_name(path.name + ".j.bak")
+    backup = path.with_name(path.name + ".vermink.bak")
     backed_up = ""
     if not backup.is_file() and existing.strip():
         atomic_write(backup, existing)
@@ -167,7 +167,7 @@ def uninstall(shell: str, home: str | Path | None = None, rc: str | Path | None 
     path = Path(rc).expanduser() if rc else rc_path(shell, home)
     if not path.is_file():
         return {"shell": shell, "rc": str(path), "restored": "", "status": "no_rc"}
-    backup = path.with_name(path.name + ".j.bak")
+    backup = path.with_name(path.name + ".vermink.bak")
     if backup.is_file():
         atomic_write(path, backup.read_text(encoding="utf-8"))
         return {"shell": shell, "rc": str(path), "restored": str(backup), "status": "restored"}

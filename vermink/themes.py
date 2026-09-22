@@ -4,7 +4,7 @@ from __future__ import annotations
 
 __all__ = ["BUILT_INS", "default", "source"]
 
-DARK = """## j theme dark
+DARK = """## vermink theme dark
 
 [palette]
 user = bright_green
@@ -39,7 +39,7 @@ time = time
 exit_code = exit_code
 """
 
-LIGHT = """## j theme light
+LIGHT = """## vermink theme light
 
 [palette]
 user = blue
@@ -78,7 +78,7 @@ BUILT_INS: dict[str, str] = {"dark": DARK, "light": LIGHT}
 
 
 def default() -> str:
-    """Return the default theme name used by j init."""
+    """Return the default theme name used by vermink init."""
     return "dark"
 
 

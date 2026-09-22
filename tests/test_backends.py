@@ -1,10 +1,10 @@
-"""Tests for j.backends module."""
+"""Tests for vermink.backends module."""
 
 import pytest
 
-from j.backends import bash, preview, pwsh, zsh
-from j.config import parse
-from j.themes import BUILT_INS
+from vermink.backends import bash, preview, pwsh, zsh
+from vermink.config import parse
+from vermink.themes import BUILT_INS
 
 
 @pytest.fixture

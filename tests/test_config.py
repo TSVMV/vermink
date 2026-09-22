@@ -1,9 +1,9 @@
-"""Tests for j.config module."""
+"""Tests for vermink.config module."""
 
 import pytest
 
-from j.config import parse
-from j.errors import ConfigError
+from vermink.config import parse
+from vermink.errors import ConfigError
 
 
 class TestParse:
@@ -123,7 +123,7 @@ class TestThemeColor:
 
 class TestThemeToText:
     def test_roundtrip(self):
-        text = """## j theme test
+        text = """## vermink theme test
 
 [palette]
 user = green
@@ -138,7 +138,7 @@ time
         assert theme.to_text() == text
 
     def test_format_included(self):
-        text = """## j theme test
+        text = """## vermink theme test
 
 [palette]
 foo = green
@@ -160,13 +160,13 @@ time = time_color
 
 class TestLoad:
     def test_load_nonexistent_raises(self, tmp_path):
-        from j.config import load
+        from vermink.config import load
 
         with pytest.raises(ConfigError, match="找不到"):
             load(tmp_path / "missing.conf")
 
     def test_load_valid_file(self, tmp_path):
-        from j.config import load
+        from vermink.config import load
 
         conf = tmp_path / "test.conf"
         conf.write_text("[palette]\nuser = green\n[prompt]\nuser\n")

@@ -1,6 +1,6 @@
-"""Tests for j.segments module."""
+"""Tests for vermink.segments module."""
 
-from j.segments import abbreviate, value
+from vermink.segments import abbreviate, value
 
 
 class TestAbbreviate:

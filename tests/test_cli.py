@@ -1,8 +1,8 @@
-"""Tests for j.cli module."""
+"""Tests for vermink.cli module."""
 
 import pytest
 
-from j.cli import main
+from vermink.cli import main
 
 
 class TestVersion:
@@ -79,7 +79,7 @@ class TestInstall:
 class TestUninstall:
     def test_uninstall(self, capsys, tmp_path):
         rc = tmp_path / ".zshrc"
-        rc.write_text("# >>> j theme theme=dark\ncontent\n# <<< j theme\n")
+        rc.write_text("# >>> vermink theme theme=dark\ncontent\n# <<< vermink theme\n")
         result = main(["uninstall", "--shell", "zsh", "--rc", str(rc)])
         assert result == 0
         out = capsys.readouterr().out

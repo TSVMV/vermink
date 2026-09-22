@@ -1,10 +1,10 @@
-"""Tests for j.manager module."""
+"""Tests for vermink.manager module."""
 
 import pytest
 
-from j.config import parse
-from j.errors import ConfigError, JError
-from j.manager import (
+from vermink.config import parse
+from vermink.errors import ConfigError, VerminkError
+from vermink.manager import (
     block,
     config_dir,
     current_theme,
@@ -18,26 +18,26 @@ from j.manager import (
     uninstall,
     write_theme,
 )
-from j.themes import BUILT_INS
+from vermink.themes import BUILT_INS
 
 
 class TestPaths:
     def test_config_dir_default(self):
         result = config_dir()
-        assert result.name == "j"
+        assert result.name == "vermink"
         assert result.parent.name == ".config" or "XDG" in str(result)
 
     def test_config_dir_custom_root(self, tmp_path):
         result = config_dir(tmp_path)
-        assert result == tmp_path / "j"
+        assert result == tmp_path / "vermink"
 
     def test_theme_dir(self, tmp_path):
         result = theme_dir(tmp_path)
-        assert result == tmp_path / "j" / "themes"
+        assert result == tmp_path / "vermink" / "themes"
 
     def test_theme_path(self, tmp_path):
         result = theme_path("dark", tmp_path)
-        assert result == tmp_path / "j" / "themes" / "dark.conf"
+        assert result == tmp_path / "vermink" / "themes" / "dark.conf"
 
     def test_rc_path_zsh(self, tmp_path):
         result = rc_path("zsh", tmp_path)
@@ -52,13 +52,13 @@ class TestPaths:
         assert result.name == "profile.ps1"
 
     def test_rc_path_unknown_shell(self):
-        with pytest.raises(JError, match="未知 shell"):
+        with pytest.raises(VerminkError, match="未知 shell"):
             rc_path("fish")
 
 
 class TestRemoveBlock:
     def test_removes_block(self):
-        text = "before\n# >>> j theme theme=dark\ncontent\n# <<< j theme\nafter\n"
+        text = "before\n# >>> vermink theme theme=dark\ncontent\n# <<< vermink theme\nafter\n"
         assert remove_block(text) == "before\nafter\n"
 
     def test_no_block(self):
@@ -66,7 +66,7 @@ class TestRemoveBlock:
         assert remove_block(text) == text
 
     def test_multiple_blocks(self):
-        text = "a\n# >>> j theme theme=dark\nx\n# <<< j theme\nb\n# >>> j theme theme=light\ny\n# <<< j theme\nc\n"
+        text = "a\n# >>> vermink theme theme=dark\nx\n# <<< vermink theme\nb\n# >>> vermink theme theme=light\ny\n# <<< vermink theme\nc\n"
         assert remove_block(text) == "a\nb\nc\n"
 
     def test_empty_input(self):
@@ -82,14 +82,14 @@ class TestBlock:
         assert "echo hello" in result
 
 
-BLOCK_START = "# >>> j theme"
-BLOCK_END = "# <<< j theme"
+BLOCK_START = "# >>> vermink theme"
+BLOCK_END = "# <<< vermink theme"
 
 
 class TestCurrentTheme:
     def test_finds_theme(self, tmp_path):
         rc = tmp_path / ".zshrc"
-        rc.write_text("alias ll='ls -la'\n# >>> j theme theme=dark\nstuff\n# <<< j theme\n")
+        rc.write_text("alias ll='ls -la'\n# >>> vermink theme theme=dark\nstuff\n# <<< vermink theme\n")
         assert current_theme("zsh", rc=rc) == "dark"
 
     def test_no_theme(self, tmp_path):
@@ -158,13 +158,13 @@ class TestInstallUninstall:
         rc = tmp_path / ".zshrc"
         rc.write_text("existing content\n")
         install(theme, "zsh", "echo hello", rc=rc)
-        backup = tmp_path / ".zshrc.j.bak"
+        backup = tmp_path / ".zshrc.vermink.bak"
         assert backup.exists()
         assert "existing content" in backup.read_text()
 
     def test_install_replaces_old_theme(self, tmp_path, theme):
         rc = tmp_path / ".zshrc"
-        rc.write_text("# >>> j theme theme=old\nold content\n# <<< j theme\nother\n")
+        rc.write_text("# >>> vermink theme theme=old\nold content\n# <<< vermink theme\nother\n")
         install(theme, "zsh", "echo new", rc=rc)
         content = rc.read_text()
         assert "theme=dark" in content
@@ -173,7 +173,7 @@ class TestInstallUninstall:
 
     def test_uninstall_removes_block(self, tmp_path, theme):
         rc = tmp_path / ".zshrc"
-        rc.write_text("before\n# >>> j theme theme=dark\nstuff\n# <<< j theme\nafter\n")
+        rc.write_text("before\n# >>> vermink theme theme=dark\nstuff\n# <<< vermink theme\nafter\n")
         result = uninstall("zsh", rc=rc)
         assert result["status"] == "removed"
         content = rc.read_text()
@@ -183,8 +183,8 @@ class TestInstallUninstall:
 
     def test_uninstall_restores_backup(self, tmp_path, theme):
         rc = tmp_path / ".zshrc"
-        rc.write_text("# >>> j theme theme=dark\nstuff\n# <<< j theme\n")
-        backup = tmp_path / ".zshrc.j.bak"
+        rc.write_text("# >>> vermink theme theme=dark\nstuff\n# <<< vermink theme\n")
+        backup = tmp_path / ".zshrc.vermink.bak"
         backup.write_text("original content\n")
         result = uninstall("zsh", rc=rc)
         assert result["status"] == "restored"

@@ -1,13 +1,13 @@
-"""Exception types shared across the j package."""
+"""Exception types shared across the vermink package."""
 
-__all__ = ["ConfigError", "JError", "UsageError"]
-
-
-class JError(Exception):
-    """Base error for all j failures."""
+__all__ = ["ConfigError", "UsageError", "VerminkError"]
 
 
-class ConfigError(JError):
+class VerminkError(Exception):
+    """Base error for all vermink failures."""
+
+
+class ConfigError(VerminkError):
     """A theme file cannot be parsed or a reference inside it is invalid."""
 
     def __init__(self, message: str, path: str = "", line: int | None = None):
@@ -17,5 +17,5 @@ class ConfigError(JError):
         super().__init__(f"{where}: {message}" if where else message)
 
 
-class UsageError(JError):
+class UsageError(VerminkError):
     """The user passed invalid command line input."""

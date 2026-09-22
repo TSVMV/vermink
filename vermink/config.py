@@ -11,8 +11,8 @@ from .segments import SEGMENT_DEFAULT_COLORS, SUPPORTED_SEGMENTS
 
 __all__ = ["BLOCK_END", "BLOCK_START", "SECTIONS", "Theme", "load", "parse"]
 
-BLOCK_START = "# >>> j theme"
-BLOCK_END = "# <<< j theme"
+BLOCK_START = "# >>> vermink theme"
+BLOCK_END = "# <<< vermink theme"
 
 SECTIONS: tuple[str, ...] = ("palette", "prompt", "status", "format")
 VALUE_SECTIONS: tuple[str, ...] = ("palette", "format")
@@ -56,7 +56,7 @@ class Theme:
 
     def to_text(self) -> str:
         """Render the theme back to the text format."""
-        lines = [f"## j theme {self.name}", "", "[palette]"]
+        lines = [f"## vermink theme {self.name}", "", "[palette]"]
         lines.extend(f"{name} = {spec}" for name, spec in self.palette.items())
         lines.extend(["", "[prompt]", *self.prompt, "", "[status]", *self.status])
         if self.format:

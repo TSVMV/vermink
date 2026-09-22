@@ -1,4 +1,4 @@
-"""Command line interface for j."""
+"""Command line interface for vermink."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from pathlib import Path
 from . import __version__
 from .backends import bash, preview, pwsh, zsh
 from .config import Theme
-from .errors import ConfigError, JError
+from .errors import ConfigError, VerminkError
 from .manager import SHELLS, current_theme, install, load_theme, rc_path, theme_names, uninstall
 from .themes import BUILT_INS, default, source
 
@@ -42,15 +42,15 @@ def detect_shell() -> str:
 def shell_backend(shell: str):
     """Return the rendering backend for a shell name, raising on unknown shells."""
     if shell not in BACKENDS:
-        raise JError(f"不支持的 shell {shell!r}，支持 {', '.join(BACKENDS)}")
+        raise VerminkError(f"不支持的 shell {shell!r}，支持 {', '.join(BACKENDS)}")
     return BACKENDS[shell]
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="j", description="零依赖终端美化引擎：把纯文本主题编译成 shell 提示符"
+        prog="vermink", description="零依赖终端美化引擎：把纯文本主题编译成 shell 提示符"
     )
-    parser.add_argument("--version", action="version", version=f"j {__version__}")
+    parser.add_argument("--version", action="version", version=f"vermink {__version__}")
     sub = parser.add_subparsers(dest="command", required=True)
 
     init = sub.add_parser("init", help="生成默认主题并安装到启动文件")
@@ -58,7 +58,7 @@ def build_parser() -> argparse.ArgumentParser:
     init.add_argument("--name", default=None, help="主题保存名，默认与主题同名")
     init.add_argument("--shell", default=detect_shell(), choices=SHELLS)
     init.add_argument("--no-install", action="store_true", help="只保存主题，不写入启动文件")
-    init.add_argument("--dir", default=None, help="主题目录，默认 ~/.config/j/themes")
+    init.add_argument("--dir", default=None, help="主题目录，默认 ~/.config/vermink/themes")
     init.add_argument("--rc", default=None, help="启动文件路径，默认按 shell 推断")
 
     show = sub.add_parser("show", help="打印主题源配置")
@@ -167,7 +167,7 @@ def main(argv: list[str] | None = None) -> int:
     }
     try:
         return handlers[args.command](args)
-    except (JError, ConfigError) as exc:
+    except (VerminkError, ConfigError) as exc:
         print(f"错误：{exc}", file=sys.stderr)
         return 1
     except KeyboardInterrupt:

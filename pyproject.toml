@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "j"
+name = "vermink"
 version = "0.1.0"
 description = "Zero-dependency terminal theme engine: compile text themes into Zsh/Bash/PowerShell prompts"
 readme = "README.md"
@@ -18,13 +18,13 @@ classifiers = [
 ]
 
 [project.scripts]
-j = "j.cli:main"
+vermink = "vermink.cli:main"
 
 [project.optional-dependencies]
 test = ["pytest"]
 
 [tool.setuptools.packages.find]
-include = ["j*"]
+include = ["vermink*"]
 
 [tool.ruff]
 line-length = 100
