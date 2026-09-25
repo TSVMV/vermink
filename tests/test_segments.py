@@ -48,6 +48,11 @@ class TestValue:
         import subprocess
 
         subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True)
+        # 显式建分支，不依赖 git init.defaultBranch 的本地默认值
+        subprocess.run(
+            ["git", "checkout", "-b", "main"],
+            cwd=tmp_path, check=True, capture_output=True,
+        )
         subprocess.run(
             ["git", "config", "user.email", "test@test.com"],
             cwd=tmp_path, check=True, capture_output=True,
